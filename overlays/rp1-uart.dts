@@ -1,0 +1,29 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2712";
+
+	fragmet@0 {
+		target-path = "/";
+		__overlay__ {
+			uart123: serial@1f00030000 {
+				compatible = "arm,pl011", "arm,primecell";
+				reg = <0x7d001000 0x200>;
+				// interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>;
+				clocks = <&clk_uart>,
+					<&clk_vpu>;
+				clock-names = "uartclk", "apb_pclk";
+				arm,primecell-periphid = <0x00241011>;
+				status = "okay";
+			};
+		};
+	};
+
+	fragment@1 {
+		target = <&chosen>;
+		__overlay__ {
+			stdout-path = "uart123:115200n8";
+		};
+	};
+};
